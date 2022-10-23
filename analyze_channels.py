@@ -16,7 +16,7 @@ from trends_finder import get_trending_by_region
 import json
 from datetime import datetime
 
-nlp = spacy.load(r"D:\Github\Trending\venv\Lib\site-packages\en_core_web_md\en_core_web_md-3.4.1")
+nlp = spacy.load("en_core_web_md")
 
 
 def get_hotwords(text):
