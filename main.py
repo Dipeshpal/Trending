@@ -55,4 +55,4 @@ def read_item(request: Request):
                                                     "img_path": img_path})
 
 
-uvicorn.run(app, host="0.0.0.0", port="8080")
+uvicorn.run(app, host="0.0.0.0", port=8080)
