@@ -8,11 +8,26 @@ from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 import uvicorn
-
+import analyze_channels
+import yt
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/reports", StaticFiles(directory="reports"), name="static")
+
+
+@app.get("/gen_reports")
+def gen_reports(key: str):
+    if key == "iamchicken":
+        analyze_channels.main()
+    return "DONE"
+
+
+@app.get("/fetch_new_trends")
+def fetch_new_trends(key: str):
+    if key == "iamchicken":
+        yt.start()
+    return "DONE"
 
 
 @app.get("/show_detail_report")
@@ -40,4 +55,4 @@ def read_item(request: Request):
                                                     "img_path": img_path})
 
 
-uvicorn.run(app,host="0.0.0.0", port="8080")
+uvicorn.run(app, host="0.0.0.0", port="8080")
