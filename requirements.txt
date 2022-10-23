@@ -63,3 +63,4 @@ watchfiles==0.18.0
 websockets==10.3
 wordcloud==1.8.2.2
 spacy
+pytextrank
