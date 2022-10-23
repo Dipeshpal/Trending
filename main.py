@@ -7,6 +7,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+import uvicorn
+
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -36,3 +38,6 @@ def read_item(request: Request):
     img_path = f"reports/{today}/wordcloud.png"
     return templates.TemplateResponse("home.html", {"request": request, "ranked_phrases": ranked_phrases,
                                                     "img_path": img_path})
+
+
+uvicorn.run(app,host="0.0.0.0", port="8080")
