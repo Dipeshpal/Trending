@@ -10,6 +10,9 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 import analyze_channels
 import yt
+from fastapi.responses import RedirectResponse
+from fastapi import APIRouter, FastAPI, Request, status
+
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -48,11 +51,15 @@ def show_best_phrases():
 @app.get("/", response_class=HTMLResponse)
 def read_item(request: Request):
     today = datetime.today().strftime('%Y-%m-%d')
-    ranked_phrases = json.load(open(f"reports/{today}/ranked_phrase.json"))
-    # best_phrases = [i for i in ranked_phrases]
-    img_path = f"reports/{today}/wordcloud.png"
-    return templates.TemplateResponse("home.html", {"request": request, "ranked_phrases": ranked_phrases,
-                                                    "img_path": img_path})
+    try:
+        ranked_phrases = json.load(open(f"reports/{today}/ranked_phrase.json"))
+        # best_phrases = [i for i in ranked_phrases]
+        img_path = f"reports/{today}/wordcloud.png"
+        return templates.TemplateResponse("home.html", {"request": request, "ranked_phrases": ranked_phrases,
+                                                        "img_path": img_path})
+    except Exception as e:
+        print(e)
+        return RedirectResponse('/docs', status_code=status.HTTP_303_SEE_OTHER)
 
 
 uvicorn.run(app, host="0.0.0.0", port=8080)

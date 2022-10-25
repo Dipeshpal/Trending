@@ -62,6 +62,6 @@ wasabi==0.10.1
 watchfiles==0.18.0
 websockets==10.3
 wordcloud==1.8.2.2
-spacy
-pytextrank
-google-api-python-client
+spacy-download==1.0.0
+pytextrank==3.2.4
+google-api-python-client==2.65.0
