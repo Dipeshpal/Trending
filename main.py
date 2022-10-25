@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 import uvicorn
 from datetime import datetime
@@ -33,18 +35,26 @@ app.add_middleware(
 )
 
 
-@app.get("/2_gen_reports")
-async def gen_reports(key: str):
-    if key == "iamchicken":
-        analyze_channels.main()
-    return "Report Generated"
-
-
 @app.get("/1_fetch_new_trends")
 def fetch_new_trends(key: str):
-    if key == "iamchicken":
+    key_saved = os.environ['key']
+    if key == key_saved:
         yt.start()
+    else:
+        return "Wrong key"
     return "DONE"
+
+
+@app.get("/2_gen_reports")
+async def gen_reports(key: str):
+    key_saved = os.environ['key']
+    if key == key_saved:
+        status_msg, msg = analyze_channels.main()
+        if not status_msg:
+            return msg + ". <a href='/docs'>Fetch New Trends First</a>"
+    else:
+        return "Wrong Key"
+    return "Report Generated"
 
 
 # @app.get("/show_detail_report")

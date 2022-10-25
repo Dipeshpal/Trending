@@ -52,12 +52,6 @@ def preprocess(sentence):
     return cleantext
 
 
-today = datetime.today().strftime('%Y-%m-%d')
-df = pd.read_csv(f"videos_{today}.csv")
-all_text = ' '.join(df['Title'])
-all_text = preprocess(all_text)
-
-
 def get_most_common_words():
     # combine all the text in the dataframe
     output = set(get_hotwords(all_text))
@@ -177,7 +171,21 @@ def report_generation():
     print("Report generated successfully")
     return top_phrase
 
+
+global all_text
+
+
 def main():
+    today = datetime.today().strftime('%Y-%m-%d')
+    try:
+        df = pd.read_csv(f"videos_{today}.csv")
+        all_text = ' '.join(df['Title'])
+        all_text = preprocess(all_text)
+    except Exception as e:
+        print(e)
+        print("Something went wrong while reading the csv file")
+        return False, f"videos_{today}.csv is not available"
+
     create_word_cloud()
     # get_ranked_phrase_with_country_rank()
     top_phrase = report_generation()

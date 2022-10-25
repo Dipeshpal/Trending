@@ -100,7 +100,8 @@ class Youtube_API:
 def start():
     obj = Youtube_API()
     channel_name = ['TechPortOfficial', 'UtsavTechie', 'MrTechpedia', 'sambeckman', 'VenomsTech',
-                    'UnusualHacker2', 'TechOnTrend', 'TECHUM', 'TechnicalDrops', 'TipTopTech', 'TechFire1998']
+                    'UnusualHacker2', 'TechOnTrend', 'TECHUM', 'TechnicalDrops', 'TipTopTech', 'TechFire1998',
+                    'TechBurner']
 
     data = []
     for channel in tqdm(channel_name):
