@@ -52,7 +52,8 @@ def preprocess(sentence):
     return cleantext
 
 
-df = pd.read_csv("videos_2022-10-22.csv")
+today = datetime.today().strftime('%Y-%m-%d')
+df = pd.read_csv(f"videos_{today}.csv")
 all_text = ' '.join(df['Title'])
 all_text = preprocess(all_text)
 
@@ -68,7 +69,10 @@ def get_most_common_words():
 
 
 def get_ranked_phrase_with_country_rank():
-    nlp.add_pipe("textrank")
+    try:
+        nlp.add_pipe("textrank")
+    except Exception as e:
+        print(e)
     doc = nlp(all_text)
     di = {}
     li = []
@@ -87,15 +91,18 @@ def get_ranked_phrase_with_country_rank():
                 # li.append({phrase.text: trends})
             except Exception as e:
                 print("Something went wrong: ", e)
+
+    print("Creating json report")
     # li to json
     if not os.path.exists('reports'):
         os.mkdir('reports')
     today = datetime.today().strftime('%Y-%m-%d')
     if not os.path.exists(f'reports/{today}'):
         os.mkdir(f'reports/{today}')
-    print(di)
+    # print(di)
     with open(f'reports/{today}/ranked_phrase.json', 'w') as f:
         json.dump(di, f, indent=4)
+    print("Json report created")
     return li
 
 
@@ -167,12 +174,14 @@ def report_generation():
             # rename last column to 'rank'
             df_temp.rename(columns={df_temp.columns[-1]: 'rank'}, inplace=True)
             df_temp.to_csv(f'reports/{today}/{filename}', index=False)
-
+    print("Report generated successfully")
+    return top_phrase
 
 def main():
     create_word_cloud()
     # get_ranked_phrase_with_country_rank()
-    report_generation()
+    top_phrase = report_generation()
+    return top_phrase
 
 
 if __name__ == '__main__':
